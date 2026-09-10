@@ -11,12 +11,41 @@ export default function SmoothScroll({
   children: React.ReactNode;
 }) {
   /** A reload should land on the hero, not wherever the reader happened to be.
-   * The browser restores the old offset on refresh, and with Lenis running it
-   * has no idea it should not — so take the wheel: opt out of restoration, and
-   * jump to the top unless the URL asks for a specific section. */
+   *
+   * `scrollRestoration = "manual"` (set in the document head, before anything
+   * else runs) is enough for Chrome. Safari — iOS especially — re-applies its
+   * remembered offset *after* load, once images have settled the page height,
+   * so a single jump at mount gets overruled. Hence the re-assertions below,
+   * each cancelled the moment the reader touches the page, so we can never
+   * yank someone back who has started scrolling on their own. */
   useEffect(() => {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    if (!window.location.hash) window.scrollTo(0, 0);
+    if (window.location.hash) return;
+
+    let theirs = false;
+    const yield_ = () => {
+      theirs = true;
+    };
+    const toTop = () => {
+      if (!theirs) window.scrollTo(0, 0);
+    };
+
+    const opts = { passive: true, once: true } as const;
+    window.addEventListener("wheel", yield_, opts);
+    window.addEventListener("touchstart", yield_, opts);
+    window.addEventListener("keydown", yield_, { once: true });
+    window.addEventListener("load", toTop);
+    window.addEventListener("pageshow", toTop);
+    const timers = [0, 120, 400, 900].map((ms) => setTimeout(toTop, ms));
+
+    return () => {
+      timers.forEach(clearTimeout);
+      window.removeEventListener("wheel", yield_);
+      window.removeEventListener("touchstart", yield_);
+      window.removeEventListener("keydown", yield_);
+      window.removeEventListener("load", toTop);
+      window.removeEventListener("pageshow", toTop);
+    };
   }, []);
 
   // Set NEXT_PUBLIC_NO_LENIS=1 to fall back to native scrolling (screenshot

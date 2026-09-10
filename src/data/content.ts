@@ -39,7 +39,7 @@ export const hero = {
     "Freelance, End to End",
   ],
   scrollCue: "✦ SCROLL DOWN ✦ AND KNOW ME BETTER",
-  socialProof: "Trusted by teams from DRDO to Shopify stores",
+  socialProof: "Trusted by 20+ clients, 2+ years of experience.",
   description:
     "I build scalable backend systems and AI-powered applications with Python and Django. From secure production APIs to NLP tools, I turn complex problems into reliable, production-ready software.",
   cta: { label: "Start a Project", href: "#contact" },
@@ -500,6 +500,45 @@ export const testimonials: Testimonial[] = [
     name: "Preksha Jain",
     role: "Learn Beyond Horizon",
     url: "https://www.learnbeyondhorizon.com",
+  },
+];
+
+/** Drafts written for real clients to approve, not published feedback: this
+ * array is never rendered. Send one to the client it was written about, let
+ * them cut it, reword it or say no, then move the approved version into
+ * `testimonials` above with their real name and title. */
+export const testimonialDrafts: Testimonial[] = [
+  {
+    quote:
+      "We came to Anmol with a Shopify store that looked fine and sold badly. He went through it page by page, showed us what was slowing people down, and rebuilt the parts that mattered. Checkout is quicker now and we stopped losing people on mobile.",
+    name: "Harsh Jain",
+    role: "Founder, Dellure",
+    url: "https://dellure.com",
+  },
+  {
+    quote:
+      "What I appreciated most was how little I had to chase him. Every few days there was a link I could open and click through myself, so nothing came as a surprise at the end. The site went live on the date we agreed, which honestly was not what I expected.",
+    name: "",
+    role: "SM Tech, CommHawk",
+    url: "https://commhawk.vercel.app",
+  },
+  {
+    quote:
+      "Our API was falling over whenever traffic spiked and we had no idea why. He found the queries that were doing the damage, fixed them, and left us with notes explaining what he changed so our own team could keep up. Two months on it has not gone down once.",
+    name: "",
+    role: "Backend and API work",
+  },
+  {
+    quote:
+      "He built us an automation that handles the enquiries we used to answer by hand, and it now saves my team most of a day every week. He also stayed around after launch to fix the small things we only noticed once real customers were using it.",
+    name: "",
+    role: "AI and automation work",
+  },
+  {
+    quote:
+      "Different time zones, and it still felt easy. I would send questions at night and there would be a proper answer waiting in the morning, never a one line reply that left me guessing. I have already recommended him to two other people.",
+    name: "",
+    role: "Freelance client",
   },
 ];
 

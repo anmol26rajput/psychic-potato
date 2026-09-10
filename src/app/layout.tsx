@@ -80,6 +80,15 @@ export default function RootLayout({
     // navigation animates the scroll to top instead of jumping.
     <html lang="en" data-scroll-behavior="smooth">
       <head>
+        {/* Runs before anything else, so the browser never queues a scroll
+            restore in the first place — a refresh belongs at the hero.
+            SmoothScroll holds the line afterwards for Safari, which likes to
+            re-apply its remembered offset once images settle the height. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if('scrollRestoration' in history)history.scrollRestoration='manual';if(!location.hash)window.scrollTo(0,0)}catch(e){}`,
+          }}
+        />
         <JsonLd schemas={[personSchema, websiteSchema]} />
         {/* Reveals are hidden until observed; without JS, show everything. */}
         <noscript>
