@@ -86,7 +86,7 @@ export default function RootLayout({
             re-apply its remembered offset once images settle the height. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if('scrollRestoration' in history)history.scrollRestoration='manual';if(!location.hash)window.scrollTo(0,0)}catch(e){}`,
+            __html: `try{if('scrollRestoration' in history)history.scrollRestoration='manual';var n=performance.getEntriesByType('navigation')[0],r=n?n.type==='reload':performance.navigation&&performance.navigation.type===1;if(r&&location.hash)history.replaceState(null,'',location.pathname+location.search);if(r||!location.hash)window.scrollTo(0,0)}catch(e){}`,
           }}
         />
         <JsonLd schemas={[personSchema, websiteSchema]} />

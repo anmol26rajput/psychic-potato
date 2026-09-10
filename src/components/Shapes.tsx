@@ -134,8 +134,13 @@ export function ShapeByIndex({
 type Placement = {
   Shape: (p: { id?: string }) => React.ReactElement;
   id: string;
-  /** Tailwind position + size classes. */
+  /** Tailwind position + size classes, md and up. */
   cls: string;
+  /** Phone placement. Four of the six get one: they tuck into the corners,
+   * clear of the headline and the card, so the hero keeps its character on a
+   * small screen. The other two would have to sit on the text, so they sit
+   * this one out. */
+  mobile?: string;
   rotate: string;
   duration: string;
   delay: string;
@@ -147,7 +152,8 @@ const placements: Placement[] = [
   {
     Shape: Pyramid,
     id: "p1",
-    cls: "left-[16%] top-[17%] w-[76px] lg:w-[112px] xl:w-[144px]",
+    mobile: "left-[5%] top-[12%] w-[52px]",
+    cls: "md:left-[16%] md:top-[17%] md:w-[76px] lg:w-[112px] xl:w-[144px]",
     rotate: "-12deg",
     duration: "9s",
     delay: "0s",
@@ -155,7 +161,8 @@ const placements: Placement[] = [
   {
     Shape: Star,
     id: "t1",
-    cls: "right-[16%] top-[16%] w-[76px] lg:w-[112px] xl:w-[144px]",
+    mobile: "right-[5%] top-[11%] w-[56px]",
+    cls: "md:right-[16%] md:top-[16%] md:w-[76px] lg:w-[112px] xl:w-[144px]",
     rotate: "10deg",
     duration: "11.5s",
     delay: "-1.5s",
@@ -163,7 +170,7 @@ const placements: Placement[] = [
   {
     Shape: Sphere,
     id: "s1",
-    cls: "left-[11%] top-[41%] w-[72px] lg:w-[104px] xl:w-[136px]",
+    cls: "md:left-[11%] md:top-[41%] md:w-[72px] lg:w-[104px] xl:w-[136px]",
     rotate: "0deg",
     duration: "11s",
     delay: "-2s",
@@ -171,7 +178,7 @@ const placements: Placement[] = [
   {
     Shape: Squircle,
     id: "q1",
-    cls: "right-[12%] top-[43%] w-[66px] lg:w-[96px] xl:w-[124px]",
+    cls: "md:right-[12%] md:top-[43%] md:w-[66px] lg:w-[96px] xl:w-[124px]",
     rotate: "14deg",
     duration: "12s",
     delay: "-1s",
@@ -179,7 +186,8 @@ const placements: Placement[] = [
   {
     Shape: Cylinder,
     id: "c1",
-    cls: "left-[15%] top-[63%] w-[74px] lg:w-[108px] xl:w-[140px]",
+    mobile: "left-[3%] top-[79%] w-[56px]",
+    cls: "md:left-[15%] md:top-[63%] md:w-[74px] lg:w-[108px] xl:w-[140px]",
     rotate: "8deg",
     duration: "10s",
     delay: "-4s",
@@ -187,7 +195,8 @@ const placements: Placement[] = [
   {
     Shape: Cube,
     id: "b1",
-    cls: "right-[16%] top-[64%] w-[72px] lg:w-[104px] xl:w-[136px]",
+    mobile: "right-[4%] top-[82%] w-[54px]",
+    cls: "md:right-[16%] md:top-[64%] md:w-[72px] lg:w-[104px] xl:w-[136px]",
     rotate: "-8deg",
     duration: "10.5s",
     delay: "-3s",
@@ -198,16 +207,15 @@ export default function Shapes() {
   return (
     // Sits above the wordmark, as in the reference. The stage is capped and
     // centred so the shapes stay in orbit around the content instead of
-    // drifting to the bezels on an ultrawide monitor. Hidden on phones, where
-    // they would land on the headline.
+    // drifting to the bezels on an ultrawide monitor.
     <div
-      className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-full max-w-[1180px] -translate-x-1/2 md:block xl:max-w-[1320px]"
+      className="pointer-events-none absolute inset-y-0 left-1/2 z-10 w-full max-w-[1180px] -translate-x-1/2 xl:max-w-[1320px]"
       aria-hidden
     >
-      {placements.map(({ Shape, id, cls, rotate, duration, delay }) => (
+      {placements.map(({ Shape, id, cls, mobile, rotate, duration, delay }) => (
         <div
           key={id}
-          className={`floaty absolute ${cls}`}
+          className={`floaty absolute ${mobile ?? "hidden md:block"} ${cls}`}
           style={
             {
               "--r": rotate,

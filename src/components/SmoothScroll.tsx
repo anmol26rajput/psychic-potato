@@ -20,7 +20,16 @@ export default function SmoothScroll({
    * yank someone back who has started scrolling on their own. */
   useEffect(() => {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    if (window.location.hash) return;
+
+    /** A refresh means the top, hash or no hash. Tapping a menu item leaves
+     * `#about` (or worse) in the address bar, Safari hides it, and every later
+     * refresh silently lands mid-page. The head script already stripped it on
+     * a reload; a fresh visit to a shared `#section` link is still honoured. */
+    const entry = performance.getEntriesByType(
+      "navigation",
+    )[0] as PerformanceNavigationTiming | undefined;
+    const reloaded = entry?.type === "reload";
+    if (window.location.hash && !reloaded) return;
 
     let theirs = false;
     const yield_ = () => {
@@ -36,7 +45,9 @@ export default function SmoothScroll({
     window.addEventListener("keydown", yield_, { once: true });
     window.addEventListener("load", toTop);
     window.addEventListener("pageshow", toTop);
-    const timers = [0, 120, 400, 900].map((ms) => setTimeout(toTop, ms));
+    // Safari can restore late, after the hero image settles the height, so the
+    // last of these lands well past load.
+    const timers = [0, 120, 400, 900, 1600].map((ms) => setTimeout(toTop, ms));
 
     return () => {
       timers.forEach(clearTimeout);

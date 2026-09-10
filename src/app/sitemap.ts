@@ -2,29 +2,33 @@ import type { MetadataRoute } from "next";
 import { posts } from "@/data/posts";
 import { siteUrl } from "@/lib/site";
 
-/** Newest post drives the home/blog lastModified, so the sitemap moves
- * whenever the site actually changes rather than on every deploy. */
+/** The home and archive pages change with the build (new projects, new copy),
+ * so they carry the build date. Pinning them to the newest post instead told
+ * crawlers nothing had changed since that post, which is how a stale title can
+ * sit in the results for months. The blog index still follows its newest post,
+ * because that is genuinely when it last changed. */
 const latestPost = posts[0]?.date;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = latestPost ? new Date(latestPost) : new Date();
+  const buildDate = new Date();
+  const blogModified = latestPost ? new Date(latestPost) : buildDate;
 
   return [
     {
       url: siteUrl,
-      lastModified,
+      lastModified: buildDate,
       changeFrequency: "monthly",
       priority: 1,
     },
     {
       url: `${siteUrl}/work`,
-      lastModified,
+      lastModified: buildDate,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${siteUrl}/blog`,
-      lastModified,
+      lastModified: blogModified,
       changeFrequency: "weekly",
       priority: 0.8,
     },

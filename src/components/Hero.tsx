@@ -91,8 +91,12 @@ export default function Hero() {
           </div>
         </div>
 
+        {/* Logos beside the line is a desktop shape: on a phone the sentence
+            wraps to two lines and the whole cluster reads off-centre, so it
+            stacks instead, both halves centred on the same axis as everything
+            else in the hero. */}
         <div
-          className="rise mt-6 flex items-center gap-3"
+          className="rise mt-6 flex flex-col items-center gap-2 sm:flex-row sm:gap-3"
           style={{ animationDelay: "0.2s" }}
         >
           <span className="flex -space-x-2">
@@ -112,7 +116,7 @@ export default function Hero() {
               </span>
             ))}
           </span>
-          <p className="text-[14px] font-medium text-muted">
+          <p className="max-w-[30ch] text-balance text-center text-[14px] font-medium text-muted sm:max-w-none sm:text-left">
             {hero.socialProof}
           </p>
         </div>
