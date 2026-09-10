@@ -522,6 +522,17 @@ html.lenis body {
 .marquee-track:hover {
   animation-play-state: paused;
 }
+/* Swipeable rails scroll natively; the scrollbar itself would cut the mask. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Fades the logo rail into the page edges instead of cutting it. */
 .marquee-mask {
   mask-image: linear-gradient(

@@ -67,9 +67,14 @@ export default function Nav() {
           Contact
         </Link>
 
-        {/* Mobile */}
-        <div className="flex w-full items-center justify-between rounded-[96px] border border-hair bg-white/80 py-2 pl-5 pr-2 shadow-[0_6px_24px_rgba(16,16,16,0.07)] backdrop-blur-[14px] md:hidden">
-          <Link href="/" className="text-[14px] font-bold tracking-tight">
+        {/* Mobile: two pills rather than one full-width bar — a single white
+            slab with a tiny word at each end reads as a browser search field,
+            and it echoes the desktop shape (link cluster + its own button). */}
+        <div className="flex w-full items-center justify-between gap-3 md:hidden">
+          <Link
+            href="/"
+            className="rounded-[96px] border border-hair bg-white/80 px-5 py-2.5 text-[14px] font-bold tracking-tight shadow-[0_6px_24px_rgba(16,16,16,0.07)] backdrop-blur-[14px]"
+          >
             ANMOL
           </Link>
           <button
@@ -77,7 +82,7 @@ export default function Nav() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="rounded-[96px] bg-ink px-4 py-1.5 text-[13px] font-medium text-white"
+            className="rounded-[96px] bg-ink px-5 py-2.5 text-[13px] font-medium text-white shadow-[0_6px_24px_rgba(16,16,16,0.12)]"
           >
             {open ? "Close" : "Menu"}
           </button>

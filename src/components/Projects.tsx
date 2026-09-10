@@ -19,14 +19,15 @@ export default function Projects() {
             </Reveal>
           ))}
 
-          {/* Four projects across three columns leaves two holes on an
-              ultrawide screen. Fill them with the top of the archive — same
-              tray and caption shape, text instead of a preview, and only ever
-              rendered where those holes exist. */}
-          {otherWorks.slice(0, 2).map((project, idx) => {
+          {/* Five projects leave one hole in both grids — the second column of
+              row three, and the third column of row two on ultrawide. One card
+              from the top of the archive closes both, in the same tray and
+              caption shape with text where a preview would be. The single
+              column on phones never has a hole, so it never shows. */}
+          {otherWorks.slice(0, 1).map((project, idx) => {
             const hue = tileHues[(works.length + idx) % tileHues.length];
             return (
-              <div key={project.name} className="hidden 2xl:block">
+              <div key={project.name} className="hidden md:block">
                 <Reveal delay={(idx % 2) * 0.06}>
                   <a
                     href={project.url}

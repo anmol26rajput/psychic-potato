@@ -85,13 +85,23 @@ export const works = [
     logo: "/work/logos/commhawk.png",
     url: "https://commhawk.vercel.app",
   },
+  {
+    name: "anmolrajput.com",
+    industry: ["Portfolio", "Personal Site"],
+    services: ["Design & Development", "SEO"],
+    year: "2026",
+    // Headless-Chrome capture of the live site at 16:10, the card's aspect.
+    image: "/work/portfolio.jpg",
+    url: "https://anmol-rajput.vercel.app",
+  },
 ] satisfies Array<{
   name: string;
   industry: string[];
   services: string[];
   year: string;
   image: string;
-  logo: string;
+  /** Only the brand rail renders these, so a project without one is fine. */
+  logo?: string;
   invertLogo?: boolean;
   url?: string;
 }>;
@@ -99,22 +109,6 @@ export const works = [
 /** Projects pulled from github.com/anmol26rajput. These aren't deployed yet,
  * so each links to its source repo for now — swap in live URLs as they ship. */
 export const otherWorks = [
-  {
-    name: "anmolrajput.com",
-    industry: "Portfolio Website",
-    description:
-      "This site — design system, motion, and SEO, built from scratch in Next.js.",
-    year: "2026",
-    url: "https://www.anmolrajput.com" as string | undefined,
-  },
-  {
-    name: "White Light IT Solutions",
-    industry: "IT Services",
-    description:
-      "Backend development on client projects — production APIs, integrations, and the systems behind them.",
-    year: "2025",
-    url: "http://www.lightswhite.com" as string | undefined,
-  },
   {
     name: "Django ML App",
     industry: "Machine Learning",
