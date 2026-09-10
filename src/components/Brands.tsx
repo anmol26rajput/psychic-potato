@@ -35,19 +35,34 @@ export default function Brands() {
      * float here and writing the absolute value keeps the sub-pixel remainder. */
     let pos = el.scrollLeft;
     let written = pos;
+
+    /** Reading scrollWidth or scrollLeft after writing scrollLeft forces the
+     * browser to re-lay-out mid-frame, which is what Lighthouse reports as a
+     * forced reflow. So the width is measured once (and again on resize), and
+     * a scroll the reader caused is picked up from the scroll event rather
+     * than by polling the element every frame. */
+    let half = el.scrollWidth / 2;
+    const measure = () => {
+      half = el.scrollWidth / 2;
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+
+    /** Fires for our own writes too, so only a jump we did not make counts. */
+    const onScroll = () => {
+      if (Math.abs(el.scrollLeft - written) > 1.5) pos = el.scrollLeft;
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+
     let frame = requestAnimationFrame(function step(now) {
-      const half = el.scrollWidth / 2;
       const dt = Math.min(now - last, 100); // a backgrounded tab shouldn't lurch
       last = now;
       if (half > 0) {
-        // A swipe (and its momentum) moves the rail out from under us — take
-        // their position as the new truth rather than fighting it.
-        if (Math.abs(el.scrollLeft - written) > 1.5) pos = el.scrollLeft;
         if (!paused) pos += (dt / 1000) * (half / PASS_SECONDS);
         if (pos >= half) pos -= half;
         else if (pos < 0) pos += half;
         el.scrollLeft = pos;
-        written = el.scrollLeft;
+        written = pos;
       }
       frame = requestAnimationFrame(step);
     });
@@ -71,6 +86,8 @@ export default function Brands() {
 
     return () => {
       cancelAnimationFrame(frame);
+      observer.disconnect();
+      el.removeEventListener("scroll", onScroll);
       events.forEach(([type, fn]) => el.removeEventListener(type, fn));
     };
   }, []);
@@ -126,7 +143,9 @@ export default function Brands() {
                             sizes="180px"
                             className="object-contain"
                             draggable={false}
-                            unoptimized
+                            /* Rasters go through the optimiser; SVGs cannot,
+                               so they pass straight through. */
+                            unoptimized={b.logo?.endsWith(".svg")}
                           />
                         </span>
                       </a>

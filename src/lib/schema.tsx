@@ -55,6 +55,10 @@ export const profilePageSchema = {
   url: siteUrl,
   name: siteName,
   isPartOf: { "@id": `${siteUrl}/#website` },
+  /** `mainEntity` is the required field: without it Google rejects the
+   * ProfilePage outright ("Missing field 'mainEntity'") and the page loses
+   * rich-result eligibility. `about` stays for consumers that read it. */
+  mainEntity: { "@id": `${siteUrl}/#person` },
   about: { "@id": `${siteUrl}/#person` },
   inLanguage: "en",
 };

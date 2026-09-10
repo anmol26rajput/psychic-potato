@@ -59,14 +59,17 @@ export default function ProjectCard({
             so a blurred copy fills the frame and the real image sits contained
             inside it — identical framing on every card, nothing cropped. */}
         <span className="relative block aspect-[16/10] overflow-hidden rounded-[16px] bg-[#f2f2f2]">
+          {/* The backdrop is blurred past recognition, so it only ever needs a
+              thumbnail. Both layers go through the optimiser now (AVIF/WebP at
+              the right size) instead of shipping the full-size original
+              twice. */}
           <Image
             src={work.image}
             alt=""
             aria-hidden
             fill
-            sizes="(max-width: 768px) 92vw, (max-width: 1536px) 46vw, 31vw"
+            sizes="64px"
             className="scale-110 object-cover blur-2xl"
-            unoptimized
           />
           <Image
             src={work.image}
@@ -74,7 +77,6 @@ export default function ProjectCard({
             fill
             sizes="(max-width: 768px) 92vw, (max-width: 1536px) 46vw, 31vw"
             className="object-contain transition-transform duration-700 group-hover:scale-[1.05]"
-            unoptimized
           />
         </span>
       </span>
