@@ -527,7 +527,9 @@ html.lenis body {
   scrollbar-width: none;
   -ms-overflow-style: none;
   overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
+  /* No -webkit-overflow-scrolling: touch — the legacy flag hands the element to
+     a separate iOS scrolling layer where programmatic scrollLeft is ignored,
+     which is exactly what the autoscroll writes every frame. */
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;

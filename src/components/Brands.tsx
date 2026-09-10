@@ -29,14 +29,25 @@ export default function Brands() {
 
     let paused = false;
     let last = performance.now();
+    /** The drift is well under a pixel per frame, and browsers quantise
+     * scrollLeft (to 1/dpr — whole pixels on a 1x screen), so `+=` per frame
+     * gets rounded away and the rail sits still. Carrying the position as a
+     * float here and writing the absolute value keeps the sub-pixel remainder. */
+    let pos = el.scrollLeft;
+    let written = pos;
     let frame = requestAnimationFrame(function step(now) {
       const half = el.scrollWidth / 2;
       const dt = Math.min(now - last, 100); // a backgrounded tab shouldn't lurch
       last = now;
-      if (!paused && half > 0) el.scrollLeft += (dt / 1000) * (half / PASS_SECONDS);
       if (half > 0) {
-        if (el.scrollLeft >= half) el.scrollLeft -= half;
-        else if (el.scrollLeft <= 0) el.scrollLeft += half;
+        // A swipe (and its momentum) moves the rail out from under us — take
+        // their position as the new truth rather than fighting it.
+        if (Math.abs(el.scrollLeft - written) > 1.5) pos = el.scrollLeft;
+        if (!paused) pos += (dt / 1000) * (half / PASS_SECONDS);
+        if (pos >= half) pos -= half;
+        else if (pos < 0) pos += half;
+        el.scrollLeft = pos;
+        written = el.scrollLeft;
       }
       frame = requestAnimationFrame(step);
     });
