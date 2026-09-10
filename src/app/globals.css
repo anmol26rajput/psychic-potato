@@ -1,0 +1,710 @@
+@import "tailwindcss";
+
+/* Design tokens lifted from the Cohesion layout: indigo primary on white,
+   orange as the single accent, everything else black / 4D4D4D grey. */
+@theme {
+  --color-ink: #000000;
+  --color-muted: #4d4d4d;
+  --color-indigo: #6670ff;
+  --color-indigo-tint: rgba(102, 112, 255, 0.05);
+  --color-indigo-fill: rgba(102, 112, 255, 0.1);
+  --color-orange: #f94706;
+  --color-mint: #66ffd9;
+  --color-green: #00cc99;
+  --color-hair: rgba(16, 16, 16, 0.1);
+
+  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-pt-serif), ui-serif, Georgia, serif;
+
+  --radius-card: 48px;
+  --radius-inner: 24px;
+  --radius-pill: 96px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #fff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Lenis drives scrolling; it needs the native smooth behaviour off. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+@layer components {
+  /* The content column grows with the screen instead of parking at 1232px and
+     leaving half an ultrawide monitor empty. Gutters scale with it. Prose
+     inside gets its own `.measure` cap so line length stays readable — wide
+     layout, narrow text, which is the point. */
+  .container-x {
+    width: 100%;
+    max-width: 1232px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  @media (min-width: 640px) {
+    .container-x {
+      padding-inline: 28px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-x {
+      padding-inline: 40px;
+    }
+  }
+  /* 1360–1536 covers the common 14"/16" laptop widths, which would otherwise
+     sit at the 1232px cap with ~100px of dead margin each side. */
+  @media (min-width: 1360px) {
+    .container-x {
+      max-width: 1320px;
+      padding-inline: 48px;
+    }
+  }
+  @media (min-width: 1536px) {
+    .container-x {
+      max-width: 1440px;
+      padding-inline: 56px;
+    }
+  }
+  @media (min-width: 1920px) {
+    .container-x {
+      max-width: 1720px;
+      padding-inline: 72px;
+    }
+  }
+  @media (min-width: 2400px) {
+    .container-x {
+      max-width: 2000px;
+    }
+  }
+
+  /* Brand rail tiles. White-on-white with a hairline border read as no card
+     at all, so these get a tinted wash, a coloured lift shadow and a real
+     inner highlight. `--brand-tint` / `--brand-glow` are set per tile. */
+  .brand-rail {
+    perspective: 900px;
+  }
+  .brand-card {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(255, 255, 255, 0.84)
+    );
+    border: 1px solid rgba(16, 16, 16, 0.07);
+    /* Highlight along the top edge, a darker lip along the bottom, then two
+       coloured shadows at different spreads — that stack is what reads as a
+       solid tile lifted off the page rather than a flat rectangle. */
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      inset 0 -1px 0 rgba(16, 16, 16, 0.05),
+      0 1px 2px rgba(16, 16, 16, 0.05),
+      0 8px 14px -8px var(--brand-glow, rgba(102, 112, 255, 0.55)),
+      0 20px 34px -16px var(--brand-glow, rgba(102, 112, 255, 0.55));
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Colour wash pooling at the top edge, like light falling on the tile. */
+  .brand-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      130% 100% at 50% 0%,
+      var(--brand-tint, rgba(102, 112, 255, 0.16)),
+      transparent 72%
+    );
+  }
+  .brand-card:hover {
+    transform: translateY(-8px) rotateX(9deg) scale(1.04);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      inset 0 -1px 0 rgba(16, 16, 16, 0.05),
+      0 2px 4px rgba(16, 16, 16, 0.05),
+      0 12px 20px -8px var(--brand-glow, rgba(102, 112, 255, 0.7)),
+      0 34px 50px -18px var(--brand-glow, rgba(102, 112, 255, 0.7));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .brand-card:hover {
+      transform: none;
+    }
+  }
+
+  /* Stack tiles. Same depth recipe as the brand rail, but the lift lives in
+     the resting state: hover is already spoken for by the flip, so there is
+     no hover transform to carry it. Keeps the reference's ring-around-card
+     structure, with the ring taking the colour. */
+  .tool-ring {
+    background: var(--brand-tint, rgba(102, 112, 255, 0.16));
+    border: 1px solid rgba(16, 16, 16, 0.05);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(16, 16, 16, 0.04),
+      0 1px 2px rgba(16, 16, 16, 0.04),
+      0 10px 18px -10px var(--brand-glow, rgba(102, 112, 255, 0.5)),
+      0 24px 38px -20px var(--brand-glow, rgba(102, 112, 255, 0.5));
+  }
+  .tool-inner {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0.88)
+    );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+  /* Back face wears the colour, so the flip actually reveals something. */
+  .tool-inner-back::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      130% 110% at 50% 0%,
+      var(--brand-tint, rgba(102, 112, 255, 0.16)),
+      transparent 78%
+    );
+  }
+
+  /* Project previews. Same depth recipe as the other tinted tiles, plus a
+     lift-and-tip on hover — the cursor is already over the card, so unlike
+     the stack tiles there is a hover state going spare. */
+  .project-grid {
+    perspective: 1400px;
+  }
+  .project-tile {
+    background: var(--brand-tint, rgba(102, 112, 255, 0.16));
+    border: 1px solid rgba(16, 16, 16, 0.05);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(16, 16, 16, 0.04),
+      0 1px 2px rgba(16, 16, 16, 0.04),
+      0 12px 22px -12px var(--brand-glow, rgba(102, 112, 255, 0.5)),
+      0 28px 44px -22px var(--brand-glow, rgba(102, 112, 255, 0.5));
+    transition:
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .group:hover .project-tile {
+    transform: translateY(-6px) rotateX(4deg) scale(1.012);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(16, 16, 16, 0.04),
+      0 2px 4px rgba(16, 16, 16, 0.05),
+      0 18px 30px -12px var(--brand-glow, rgba(102, 112, 255, 0.6)),
+      0 40px 60px -24px var(--brand-glow, rgba(102, 112, 255, 0.6));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .group:hover .project-tile {
+      transform: none;
+    }
+  }
+
+  /* About stack offsets. The reference's ±24px shove pushes past the viewport
+     on a 390px phone, so the x-offset only kicks in once there is room. */
+  .stack-card {
+    --stack-x: 0px;
+    --stack-tilt: 1.2deg;
+  }
+  @media (min-width: 768px) {
+    .stack-card {
+      --stack-x: 24px;
+      --stack-tilt: 2deg;
+    }
+  }
+
+  /* Comfortable line length, independent of how wide the container gets. */
+  .measure {
+    max-width: 68ch;
+  }
+  .measure-tight {
+    max-width: 52ch;
+  }
+
+  /* 48px indigo-tinted panel — the template's one section shell. */
+  .panel {
+    border-radius: var(--radius-card);
+    background: var(--color-indigo-tint);
+  }
+
+  /* 24px white card that sits inside a panel. */
+  .card {
+    border-radius: var(--radius-inner);
+    background: #fff;
+  }
+
+  /* Two frosted surfaces that look identical and cost very differently.
+     `backdrop-filter` makes the compositor read back, blur and recomposite the
+     region behind the element on every frame it is on screen — so it is worth
+     paying for ONLY where something is genuinely behind the card. Over flat
+     white the result is pixel-identical to plain translucent white. */
+
+  /* Real glass. Use where content passes behind: the About stack, where the
+     cards overlap each other and shapes drift underneath.
+
+     The blur is declared in the @supports blocks below, not here: the CSS
+     optimiser collapses a plain `backdrop-filter` / `-webkit-backdrop-filter`
+     pair down to the webkit form alone, which Firefox ignores. Wrapping each
+     in a query for its own property keeps both in the output. */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      0 20px 60px -20px rgba(16, 16, 16, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    /* Keeps repaints inside the element's own box. */
+    contain: paint;
+  }
+
+  /* Same surface, no readback. Use on flat ground — the look is identical
+     and it costs nothing. */
+  .glass-flat {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      0 20px 60px -20px rgba(16, 16, 16, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  .glass-panel {
+    background: rgba(102, 112, 255, 0.06);
+    border: 1px solid rgba(102, 112, 255, 0.1);
+  }
+
+  /* The template's one button: a white pill floating inside a 6px
+     indigo-tinted ring. `.btn > span` is the white pill. */
+  .btn {
+    display: inline-flex;
+    padding: 6px;
+    border-radius: var(--radius-pill);
+    background: var(--color-indigo-fill);
+    transition: background 0.3s ease;
+  }
+  .btn > span:first-child {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 48px;
+    background: #fff;
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    padding: 14px 28px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .btn:hover {
+    background: var(--color-indigo);
+  }
+  .btn:hover > span:first-child {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  /* CTA variant, matching the Cohesion reference: the ink disc parks just off
+     the right edge (clipped by the ring) and springs in on hover while the
+     pill grows its right padding, so the label slides left to make room.
+     Colours stay put — the black disc does the work. */
+  .btn-cta {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-cta > span:first-child {
+    padding: 16px 32px;
+    font-size: 16px;
+    transition: padding-right 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  .btn-cta:hover,
+  .btn-cta:focus-visible {
+    background: var(--color-indigo-fill);
+  }
+  .btn-cta:hover > span:first-child,
+  .btn-cta:focus-visible > span:first-child {
+    background: #fff;
+    color: var(--color-ink);
+    padding-right: 66px;
+  }
+  .btn-cta .btn-disc {
+    position: absolute;
+    top: 50%;
+    right: -54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-pill);
+    background: var(--color-ink);
+    color: #fff;
+    transform: translateY(-50%);
+    transition: right 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  .btn-cta:hover .btn-disc,
+  .btn-cta:focus-visible .btn-disc {
+    right: 6px;
+  }
+  /* The arrow lags the disc slightly and settles late, so the eye reads the
+     arrow travelling in rather than a circle popping into place. */
+  .btn-cta .btn-disc svg {
+    transform: translateX(22px) rotate(180deg);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) 0.1s,
+      opacity 0.25s ease 0.1s;
+  }
+  .btn-cta:hover .btn-disc svg,
+  .btn-cta:focus-visible .btn-disc svg {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  /* Touch screens have no hover to trigger any of that, so the disc lives in
+     its arrived position — phones get the finished button, not an empty pill. */
+  @media (hover: none) {
+    .btn-cta > span:first-child {
+      padding-right: 66px;
+    }
+    .btn-cta .btn-disc {
+      right: 6px;
+    }
+    .btn-cta .btn-disc svg {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /* Scroll cue disc: a carved indigo groove with a raised white pebble in the
+     middle. All depth is gradients + shadows — no images. */
+  .scroll-disc {
+    background: radial-gradient(
+      circle at 32% 24%,
+      #ffffff 0%,
+      #f4f5ff 46%,
+      #e6e8ff 100%
+    );
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.95),
+      inset 0 -10px 18px rgba(102, 112, 255, 0.18),
+      inset 0 12px 20px rgba(102, 112, 255, 0.08),
+      0 22px 34px -20px rgba(20, 20, 40, 0.55);
+  }
+  .scroll-disc__core {
+    background: linear-gradient(158deg, #ffffff 0%, #f7f8ff 55%, #eceeff 100%);
+    box-shadow: 0 12px 18px -10px rgba(20, 20, 40, 0.55),
+      inset 0 2px 2px rgba(255, 255, 255, 0.95),
+      inset 0 -4px 8px rgba(102, 112, 255, 0.18);
+  }
+  /* Engraved lettering: a 1px white lip under each glyph. */
+  .scroll-disc__text {
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.95));
+  }
+
+  .btn-sm > span:first-child {
+    font-size: 13px;
+    padding: 11px 22px;
+  }
+
+  /* 14px text links in the footer columns are ~17px tall — fine for a cursor,
+     under the 24px minimum for a fingertip. Give them real height only where
+     the pointer is coarse, so the desktop rhythm is untouched. */
+  @media (hover: none) {
+    .tap-target {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+    }
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Every section heading in the template is centred, 38px/500. */
+  .section-title {
+    text-align: center;
+    font-size: clamp(21px, 2.1vw, 28px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+
+  /* The reference runs 192px of section padding. That reads as dead space at
+     this smaller type scale, so the rhythm is tightened to 112px. */
+  .section-y {
+    padding-block: 56px;
+  }
+  @media (min-width: 768px) {
+    .section-y {
+      padding-block: 112px;
+    }
+  }
+}
+
+@layer utilities {
+  /* Tightened scale: smaller sizes, tighter tracking on headings, and real
+     line-height on body copy (1.2 was set for headings and read as cramped
+     the moment a paragraph wrapped). */
+  .h-display {
+    font-size: clamp(44px, 14vw, 176px);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+  .h1 {
+    font-size: clamp(27px, 2.8vw, 38px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+  .h2 {
+    font-size: clamp(21px, 2.1vw, 28px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+  .h3 {
+    font-size: clamp(16px, 1.5vw, 18px);
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+  .body-lg {
+    font-size: clamp(14px, 1.25vw, 16px);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+  .body-md {
+    font-size: clamp(13px, 1.05vw, 14px);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+}
+
+/* Marquees run on a plain keyframe so they keep moving without JS. */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+/* Fades the logo rail into the page edges instead of cutting it. */
+.marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+/* Glass degradation ladder — each step keeps the look, drops the cost.
+   1. Desktop gets the full 20px blur.
+   2. Phones blur less: the blurred region is smaller there, so 12px reads the
+      same as 20px does on a desktop card, at roughly a third of the work.
+   3. Browsers without backdrop-filter get a near-opaque card, not a
+      see-through one that would leave text sitting on the shapes.
+   4. A viewer who has asked for reduced transparency gets flat white. */
+@supports (backdrop-filter: blur(1px)) {
+  .glass {
+    backdrop-filter: blur(20px) saturate(160%);
+  }
+  @media (max-width: 768px) {
+    .glass {
+      backdrop-filter: blur(12px) saturate(150%);
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      backdrop-filter: none;
+    }
+  }
+}
+
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  .glass {
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+  @media (max-width: 768px) {
+    .glass {
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      -webkit-backdrop-filter: none;
+    }
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgba(255, 255, 255, 0.95);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-flat {
+    background: #fff;
+  }
+}
+
+/* Scroll reveal. Hidden until observed; a <noscript> override in the layout
+   keeps the whole page readable when JS never runs. */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-shown {
+  opacity: 1;
+  transform: none;
+}
+/* Hero entrance — CSS so it plays without an animation runtime. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.pop {
+  animation: pop-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Stack flip cards: hover on pointer devices, `.is-flipped` on tap. */
+.flip-card {
+  perspective: 1200px;
+}
+.flip-inner {
+  position: relative;
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.flip-inner.is-flipped,
+.flip-card:hover .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+@keyframes spin-slow-kf {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin-slow-kf 18s linear infinite;
+}
+
+/* Down-arrow cue: small vertical bob, used in the hero CTA and scroll disc. */
+@keyframes bob-y {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+.bob {
+  display: inline-block;
+  animation: bob-y 1.6s ease-in-out infinite;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-18px) rotate(calc(var(--r, 0deg) + 6deg));
+  }
+}
+.floaty {
+  animation: float-y var(--float-duration, 9s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .bob,
+  .floaty,
+  .rise,
+  .pop,
+  .spin-slow {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
