@@ -504,39 +504,39 @@ export const testimonials: Testimonial[] = [
 ];
 
 /** Drafts written for real clients to approve, not published feedback: this
- * array is never rendered. Send one to the client it was written about, let
+ * array only renders in local dev, never in production. Send one to the client it was written about, let
  * them cut it, reword it or say no, then move the approved version into
  * `testimonials` above with their real name and title. */
 export const testimonialDrafts: Testimonial[] = [
   {
     quote:
-      "We came to Anmol with a Shopify store that looked fine and sold badly. He went through it page by page, showed us what was slowing people down, and rebuilt the parts that mattered. Checkout is quicker now and we stopped losing people on mobile.",
+      "Our Shopify store looked good but sales were low. Anmol checked every page, told us what was putting buyers off, and fixed it. Checkout is faster now and mobile sales went up.",
     name: "Harsh Jain",
     role: "Founder, Dellure",
     url: "https://dellure.com",
   },
   {
     quote:
-      "What I appreciated most was how little I had to chase him. Every few days there was a link I could open and click through myself, so nothing came as a surprise at the end. The site went live on the date we agreed, which honestly was not what I expected.",
+      "I never had to chase him for updates. He kept sending me links to check the progress, so there were no surprises. The site went live on the day we planned.",
     name: "",
     role: "SM Tech, CommHawk",
     url: "https://commhawk.vercel.app",
   },
   {
     quote:
-      "Our API was falling over whenever traffic spiked and we had no idea why. He found the queries that were doing the damage, fixed them, and left us with notes explaining what he changed so our own team could keep up. Two months on it has not gone down once.",
+      "Our API kept crashing when traffic went up. Anmol found the slow parts, fixed them, and wrote simple notes so our team understood the changes. It has been running smoothly since.",
     name: "",
     role: "Backend and API work",
   },
   {
     quote:
-      "He built us an automation that handles the enquiries we used to answer by hand, and it now saves my team most of a day every week. He also stayed around after launch to fix the small things we only noticed once real customers were using it.",
+      "He built an automation that replies to the customer questions we used to answer by hand. It saves my team almost a full day every week, and he helped with small fixes after launch too.",
     name: "",
     role: "AI and automation work",
   },
   {
     quote:
-      "Different time zones, and it still felt easy. I would send questions at night and there would be a proper answer waiting in the morning, never a one line reply that left me guessing. I have already recommended him to two other people.",
+      "We were in different time zones but it never felt like a problem. He always replied clearly and on time. I have already recommended him to my friends.",
     name: "",
     role: "Freelance client",
   },

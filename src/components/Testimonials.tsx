@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { testimonials } from "@/data/content";
+import { testimonialDrafts, testimonials as published } from "@/data/content";
+
+/** Drafts fill the carousel in local dev only, so the scroll can be seen
+ * working. Production never renders them — they aren't real client words. */
+const testimonials =
+  process.env.NODE_ENV === "development" && published.length < 2
+    ? [...published, ...testimonialDrafts]
+    : published;
 
 /** Text-only testimonial carousel. Swiping is native scroll-snap; autoplay
  * just scrolls the same track, so touch, trackpad and dots all agree on one
@@ -47,7 +54,7 @@ export default function Testimonials() {
           >
             {testimonials.map((item) => (
               <div
-                key={item.name}
+                key={item.quote}
                 className="panel w-full shrink-0 snap-center p-[6px]"
               >
                 <blockquote className="card flex h-full flex-col justify-center px-7 py-10 text-center md:px-14 md:py-12">
@@ -80,10 +87,10 @@ export default function Testimonials() {
             <div className="mt-10 flex items-center justify-center gap-2">
               {testimonials.map((t, idx) => (
                 <button
-                  key={t.name}
+                  key={t.quote}
                   type="button"
                   onClick={() => go(idx)}
-                  aria-label={`Show testimonial from ${t.name}`}
+                  aria-label={`Show testimonial from ${t.name || t.role}`}
                   aria-current={idx === i}
                   className={`size-2 rounded-full transition-colors duration-300 ${
                     idx === i ? "bg-indigo" : "bg-hair"
