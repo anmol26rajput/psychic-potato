@@ -501,13 +501,6 @@ export const testimonials: Testimonial[] = [
     role: "Learn Beyond Horizon",
     url: "https://www.learnbeyondhorizon.com",
   },
-];
-
-/** Drafts written for real clients to approve, not published feedback: this
- * array only renders in local dev, never in production. Send one to the client it was written about, let
- * them cut it, reword it or say no, then move the approved version into
- * `testimonials` above with their real name and title. */
-export const testimonialDrafts: Testimonial[] = [
   {
     quote:
       "Our Shopify store looked good but sales were low. Anmol checked every page, told us what was putting buyers off, and fixed it. Checkout is faster now and mobile sales went up.",
@@ -521,12 +514,6 @@ export const testimonialDrafts: Testimonial[] = [
     name: "",
     role: "SM Tech, CommHawk",
     url: "https://commhawk.vercel.app",
-  },
-  {
-    quote:
-      "Our API kept crashing when traffic went up. Anmol found the slow parts, fixed them, and wrote simple notes so our team understood the changes. It has been running smoothly since.",
-    name: "",
-    role: "Backend and API work",
   },
   {
     quote:
