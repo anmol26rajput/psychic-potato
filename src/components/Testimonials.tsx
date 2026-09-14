@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { testimonialDrafts, testimonials as published } from "@/data/content";
+import { testimonials as published } from "@/data/content";
 
 /** Drafts fill the carousel in local dev only, so the scroll can be seen
  * working. Production never renders them — they aren't real client words. */
 const testimonials =
   process.env.NODE_ENV === "development" && published.length < 2
-    ? [...published, ...testimonialDrafts]
+    ? [...published]
     : published;
 
 /** Text-only testimonial carousel. Swiping is native scroll-snap; autoplay
