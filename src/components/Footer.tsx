@@ -8,7 +8,7 @@ const columns = [
   {
     title: "Contact Me",
     items: [
-      { label: "Book a Call", href: "/#contact", tip: "Book a Free Call" },
+      { label: "Contact", href: "/#contact", tip: "Get in Touch" },
       {
         label: contact.email,
         href: `mailto:${contact.email}`,

@@ -86,9 +86,9 @@ export const works = [
     url: "https://commhawk.vercel.app",
   },
   {
-    name: "anmolrajput.com",
+    name: "Portfolio Design",
     industry: ["Portfolio", "Personal Site"],
-    services: ["Design & Development", "SEO"],
+    services: ["Development & SEO"],
     year: "2026",
     // Headless-Chrome capture of the live site at 16:10, the card's aspect.
     image: "/work/portfolio.jpg",

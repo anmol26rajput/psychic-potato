@@ -47,7 +47,7 @@ export default function Faq() {
               </p>
             </div>
             <Link href="/#contact" className="btn shrink-0">
-              <span>Book a Call</span>
+              <span>Contact</span>
             </Link>
           </div>
         </Reveal>

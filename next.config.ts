@@ -1,6 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // The vercel.app alias is still indexable and serves a stale duplicate of the
+  // site, which splits Google's signals. Send it to the real domain.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "anmol-rajput.vercel.app" }],
+        destination: "https://www.anmolrajput.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     // Brand logos, devicon marks and favicons are all pulled from CDNs.
     remotePatterns: [

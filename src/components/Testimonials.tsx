@@ -1,26 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { testimonials } from "@/data/content";
 
-/** Text-only testimonial card: the quote carries the section, with the
- * attribution under it. Renders nothing until there is real feedback. */
+/** Text-only testimonial carousel. Swiping is native scroll-snap; autoplay
+ * just scrolls the same track, so touch, trackpad and dots all agree on one
+ * position. Renders nothing until there is real feedback. */
 export default function Testimonials() {
+  const track = useRef<HTMLDivElement>(null);
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
 
+  const go = (idx: number) => {
+    const el = track.current;
+    if (el) el.scrollTo({ left: idx * el.clientWidth, behavior: "smooth" });
+  };
+
   useEffect(() => {
     if (paused || testimonials.length < 2) return;
-    const t = setInterval(
-      () => setI((v) => (v + 1) % testimonials.length),
-      7000,
-    );
+    const t = setInterval(() => go((i + 1) % testimonials.length), 6000);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, i]);
 
   if (testimonials.length === 0) return null;
-
-  const item = testimonials[Math.min(i, testimonials.length - 1)];
 
   return (
     <section
@@ -28,34 +30,50 @@ export default function Testimonials() {
       className="section-y"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
     >
       <div className="container-x">
         <h2 className="section-title">Kind Words from Clients</h2>
 
         <div className="mx-auto mt-10 max-w-[900px] 2xl:max-w-[1080px] md:mt-14">
-          <div className="panel p-[6px]">
-            <blockquote className="card px-7 py-10 text-center md:px-14 md:py-12">
-              <p className="body-lg italic text-ink">
-                &ldquo;{item.quote}&rdquo;
-              </p>
+          <div
+            ref={track}
+            onScroll={(e) => {
+              const el = e.currentTarget;
+              setI(Math.round(el.scrollLeft / el.clientWidth));
+            }}
+            className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain"
+          >
+            {testimonials.map((item) => (
+              <div
+                key={item.name}
+                className="panel w-full shrink-0 snap-center p-[6px]"
+              >
+                <blockquote className="card flex h-full flex-col justify-center px-7 py-10 text-center md:px-14 md:py-12">
+                  <p className="body-lg italic text-ink">
+                    &ldquo;{item.quote}&rdquo;
+                  </p>
 
-              <footer className="mt-8">
-                <p className="text-[17px] font-medium not-italic">
-                  {item.name}
-                </p>
-                <p className="mt-1 text-[14px] text-muted">{item.role}</p>
-                {item.url && (
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-block text-[14px] font-medium underline decoration-hair underline-offset-4 transition-colors hover:text-indigo"
-                  >
-                    Visit the project
-                  </a>
-                )}
-              </footer>
-            </blockquote>
+                  <footer className="mt-8">
+                    <p className="text-[17px] font-medium not-italic">
+                      {item.name}
+                    </p>
+                    <p className="mt-1 text-[14px] text-muted">{item.role}</p>
+                    {item.url && (
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-block text-[14px] font-medium underline decoration-hair underline-offset-4 transition-colors hover:text-indigo"
+                      >
+                        Visit the project
+                      </a>
+                    )}
+                  </footer>
+                </blockquote>
+              </div>
+            ))}
           </div>
 
           {testimonials.length > 1 && (
@@ -64,7 +82,7 @@ export default function Testimonials() {
                 <button
                   key={t.name}
                   type="button"
-                  onClick={() => setI(idx)}
+                  onClick={() => go(idx)}
                   aria-label={`Show testimonial from ${t.name}`}
                   aria-current={idx === i}
                   className={`size-2 rounded-full transition-colors duration-300 ${
