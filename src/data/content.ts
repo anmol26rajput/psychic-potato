@@ -577,7 +577,7 @@ export const footer = {
   ],
   socials: [
     { label: "GitHub", href: "https://github.com/anmol26rajput" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/anmol-rajput-b31061229/" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/rajputanmol/" },
     { label: "Medium", href: "https://medium.com/@anmol26rajput" },
   ],
   wordmark: "ANMOL RAJPUT'S PORTFOLIO",
