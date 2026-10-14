@@ -86,6 +86,15 @@ export const works = [
     url: "https://commhawk.vercel.app",
   },
   {
+    name: "Macro Calculator",
+    industry: ["Health & Fitness", "Web App"],
+    services: ["Web App Development", "UI Design"],
+    year: "2026",
+    // The site's own og-image; the card's blurred backdrop absorbs the 1.9:1 aspect.
+    image: "/work/macro-calculator.png",
+    url: "https://free-calculator-liftswanmol.vercel.app",
+  },
+  {
     name: "Portfolio Design",
     industry: ["Portfolio", "Personal Site"],
     services: ["Development & SEO"],
@@ -106,16 +115,9 @@ export const works = [
   url?: string;
 }>;
 
-/** Projects pulled from github.com/anmol26rajput. Most aren't deployed yet,
+/** Projects pulled from github.com/anmol26rajput. These aren't deployed yet,
  * so each links to its source repo for now — swap in live URLs as they ship. */
 export const otherWorks = [
-  {
-    name: "Macro Calculator",
-    industry: "Health & Fitness",
-    description: "A free macro calculator built for lifters with desk jobs.",
-    year: "2026",
-    url: "https://free-calculator-liftswanmol.vercel.app" as string | undefined,
-  },
   {
     name: "Django ML App",
     industry: "Machine Learning",
