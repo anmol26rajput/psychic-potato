@@ -121,7 +121,7 @@ export default function ProjectCard({
         {work.industry.join(" · ")}
       </span>
       <span className="mt-1 block text-[17px] font-medium leading-snug transition-colors group-hover:text-indigo md:text-[19px]">
-        {work.name} — {work.services[0]}
+        {work.name}: {work.services[0]}
       </span>
     </a>
   );

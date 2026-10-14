@@ -36,7 +36,7 @@ export default function WorkPage() {
             The <span className="font-serif italic">Archive</span>
           </h1>
           <p className="body-lg mt-4 max-w-[720px]">
-            Featured client work is on the{" "}
+            Featured work is on the{" "}
             <Link href="/#projects" className="underline underline-offset-4">
               home page
             </Link>
@@ -85,7 +85,7 @@ export default function WorkPage() {
               <span>Let&apos;s Work Together!</span>
             </Link>
             <p className="body-md">
-              {works.length} client projects live, {otherWorks.length} in the
+              {works.length} featured projects live, {otherWorks.length} in the
               archive.
             </p>
           </div>
