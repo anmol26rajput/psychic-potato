@@ -64,7 +64,10 @@ export default function SmoothScroll({
   if (process.env.NEXT_PUBLIC_NO_LENIS === "1") return <>{children}</>;
 
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.2 }}>
+    // `anchors`: Lenis scrolls same-page #links itself. Without it, a link to
+    // the hash already in the URL (click CTA, scroll back up, click again) is
+    // a no-op navigation and the page never moves.
+    <ReactLenis root options={{ lerp: 0.1, duration: 1.2, anchors: true }}>
       {children}
     </ReactLenis>
   );
