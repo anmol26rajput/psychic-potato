@@ -39,7 +39,7 @@ export const hero = {
     "Freelance, End to End",
   ],
   scrollCue: "✦ SCROLL DOWN ✦ AND KNOW ME BETTER",
-  socialProof: "Trusted by 20+ clients, 2+ years of experience.",
+  socialProof: "Trusted by 20+ clients, 1.5+ years of experience.",
   description:
     "I build scalable backend systems and AI-powered applications with Python and Django. From secure production APIs to NLP tools, I turn complex problems into reliable, production-ready software.",
   cta: { label: "Start a Project", href: "#contact" },
