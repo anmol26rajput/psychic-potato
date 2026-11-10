@@ -44,8 +44,8 @@ export default function Hero() {
             for. Same text a screen reader reads out. */}
         <h1 className="rise h1">
           {hero.greeting}{" "}
-          <span className="font-serif italic">{hero.firstName}</span>
-          <span className="sr-only"> Rajput, a backend and AI developer</span>!
+          <span className="font-serif italic">{hero.firstName} Rajput</span>
+          <span className="sr-only">, a backend and AI developer</span>!
         </h1>
 
         {/* Role line cycles in place — fixed height so nothing shifts. */}

@@ -15,7 +15,7 @@ export const personSchema = {
   email: `mailto:${contact.email}`,
   jobTitle: person.jobTitle,
   description: siteDescription,
-  image: `${siteUrl}/icon.png`,
+  image: `${siteUrl}/me.jpg`,
   sameAs: footer.socials.map((s) => s.href),
   address: { "@type": "PostalAddress", addressCountry: person.addressCountry },
   worksFor: { "@type": "Organization", name: person.worksFor },

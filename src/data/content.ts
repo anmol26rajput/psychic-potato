@@ -596,6 +596,7 @@ export const footer = {
     { label: "GitHub", href: "https://github.com/anmol26rajput" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/rajputanmol/" },
     { label: "Medium", href: "https://medium.com/@anmol26rajput" },
+    { label: "X", href: "https://x.com/Anmolrajput2623" },
   ],
   wordmark: "ANMOL RAJPUT'S PORTFOLIO",
 };
