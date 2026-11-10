@@ -119,6 +119,13 @@ export const works = [
  * so each links to its source repo for now — swap in live URLs as they ship. */
 export const otherWorks = [
   {
+    name: "agent-model-router",
+    industry: "AI Tools",
+    description: "One skill for Claude Code and other coding agents: it sizes each task and hands it to the cheapest Claude model (Haiku, Sonnet or Opus) that can do it well.",
+    year: "2026",
+    url: "https://github.com/anmol26rajput/agent-model-router" as string | undefined,
+  },
+  {
     name: "Django ML App",
     industry: "Machine Learning",
     description: "A Django app that serves live predictions from a trained machine learning model.",
