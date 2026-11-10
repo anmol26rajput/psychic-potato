@@ -47,7 +47,7 @@ export const person = {
   familyName: "Rajput",
   jobTitle: "Backend & AI Developer",
   /** Shown in Person schema; keep in sync with the About section. */
-  worksFor: "White Light IT Solutions LLC",
+  worksFor: "BlissPay",
   nationality: "IN",
   addressCountry: "IN",
 };

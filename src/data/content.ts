@@ -338,7 +338,8 @@ export const about = {
     },
   ],
   experience: [
-    { role: "Back End Developer at White Light IT Solutions LLC", period: "Apr 2025 - Present" },
+    { role: "Back End Developer at BlissPay", period: "Oct 2026 - Present" },
+    { role: "Back End Developer at White Light IT Solutions LLC", period: "Apr 2025 - Oct 2026" },
     { role: "Research Intern at DRDO, Ministry of Defence", period: "Sep 2023 - Dec 2023" },
     { role: "Software Engineer Intern at CipherByte Technologies", period: "Aug 2023 - Sep 2023" },
     { role: "AI/ML Intern at Microsoft", period: "Jun 2023" },
